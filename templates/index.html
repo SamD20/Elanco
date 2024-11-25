@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='mainpage.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <title>Population Data</title>
+</head>
+<body>
+    <h1>Population Data - Elanco</h1>
+
+    <p id="introText">
+        This web application allows you to view population data from a variety of countries. 
+        <br>
+        <span style="font-weight: bold;">Note:</span> The API does not have information on all countries listed.
+    </p>
+
+    <div id="mainContainer">
+        <div id="settingsContainer">
+            <form method="POST" action="">
+                <div id="menubox">
+                    <!-- Toggle Button for Show City Dropdown -->
+                    <div id="checkboxDiv">
+                        <label for="showCity">Show City Population?</label>
+                        <label class="switch">
+                            <input type="checkbox" id="showCity" name="showCity" onchange="toggleDropdown()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <!-- Country Dropdown -->
+                    <div id="countryDropdown">
+                        <label for="country">Country</label>
+                        <select id="country" name="country" onchange="updateCityDropdown()">
+                            <option value="">Choose a country</option>
+                            {% for country in countryList %}
+                                <option value="{{ country }}">{{ country }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- City Dropdown -->
+                    <div id="cityDropdown">
+                        <label for="city">City</label>
+                        <select id="city" disabled>
+                            <option value="">Choose a city</option>
+                            {% for city in cityList %}
+                                <option value="{{ city }}">{{ city }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Flag Section -->
+            <div id="flagContainer">
+                <img id="flag" src="{{ url_for('static', filename=flagUrl if flagUrl else 'flagDefault.png') }}" alt="Flag" onError="this.src='/static/flagDefault.png';">
+            </div>
+        </div>
+
+        <!-- Graph Section -->
+        <div id="graphContainer">
+            <div style="width: 800px;">
+                <canvas id="acquisitions"></canvas>
+            </div> 
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <script src="{{ url_for('static', filename='populationChart.js') }}"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>
